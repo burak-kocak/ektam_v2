@@ -1,0 +1,50 @@
+<IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteBase /ektamservis_v2
+
+        # Removes index.php from ExpressionEngine URLs
+        RewriteCond %{THE_REQUEST} ^GET.*index\.php [NC]
+        RewriteCond %{REQUEST_URI} !/system/.* [NC]
+        RewriteRule (.*?)index\.php/*(.*) /$1$2 [R=301,NE,L]
+
+        # Directs all EE web requests through the site index file
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule ^(.*)$ index.php?$1 [L]
+</IfModule>
+
+<IfModule mod_php5.c>
+        php_value upload_max_filesize 1024M
+        php_value post_max_size 1024M
+        php_value memory_limit 1024M
+        php_value max_input_time 200
+
+        php_flag register_globals 0     
+</IfModule>
+
+
+
+
+
+
+<ifmodule mod_expires.c>
+	<filesmatch "\.(jpg|gif|png|css|js|woff|ttf)$">
+		ExpiresActive on
+		ExpiresDefault "access plus 1 year"
+	</filesmatch>
+</ifmodule>
+
+<FilesMatch "\.(ttf|otf|eot|woff)$">
+  <IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+  </IfModule>
+</FilesMatch>
+
+
+
+<IfModule mod_security.c> 
+SecFilterScanPOST Off
+</IfModule>
+
+
+#AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
